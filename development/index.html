@@ -7,28 +7,39 @@
 <body>
 	<h1> Knockout Twitter </h1>
 	<div class="container-fluid">
-	<div class="row-fluid">
-  
-	<div class="span2">
-	<form data-bind="submit: addTweet">
-	  <fieldset>
-		<legend data-bind="text:userName"></legend>
-		<input data-bind="value: newTweetText" type="text" placeholder="Compose new Tweet...">
-		<button type="submit" class="btn">Tweet</button>
-	  </fieldset>
-	</form>
-	</div>
-	<div class="span10">
-	<h1> Timeline </h1>
-	<ul data-bind="foreach: timeline">
-	<li data-bind="text: message"></li>
-	</ul>
-	</div>
-	</div>
+		<div class="row-fluid">
+	  
+			<div class="span2">
+				<form data-bind="submit: addTweet">
+				  <fieldset>
+					<legend data-bind="text:userName"></legend>
+					<input data-bind="value: newTweetText" type="text" placeholder="Compose new Tweet..." >
+					<button type="submit" class="btn">Tweet</button>
+				  </fieldset>
+				</form>
+			</div>
+			
+			<div class="span4">
+				<form data-bind="submit: getTweets">
+				  <fieldset>
+					<input data-bind="value: searchForName" type="text" placeholder="Enter User Name...">
+					<button type="submit" class="btn">Search</button>
+				  </fieldset>
+				</form>
+			</div>
+			
+			<div class="span6">
+				<h1> Timeline </h1>
+				<ul data-bind="foreach: timeline">
+					<li data-bind="text: text"></li>
+				</ul>
+			</div>
+		</div>
 	</div>
 	<script src="http://code.jquery.com/jquery.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/knockout-2.2.1.js"></script>
+	<script src="js/twitterApi.js"></script>	
 	<script>
 	function myFunction(data)
 	{
@@ -42,12 +53,13 @@
 	function Tweet(message)
 	{
 		var self = this;
-		self.message = message;
+		self.text = message;
 	}
 		function AppViewModel() {
 			var self = this;
-			self.userName = "Fleko";
+			self.userName = "@fleko";
 			self.newTweetText = ko.observable();
+			self.searchForName = ko.observable();
 			self.timeline = ko.observableArray([
 			new Tweet("This is a new tweet..."),
 			new Tweet("Other Tweet")
@@ -56,6 +68,13 @@
 			self.addTweet = function(){
 				self.timeline.push(new Tweet(self.newTweetText()));
 				self.newTweetText("");
+			};
+			
+			self.getTweets = function(){
+				
+				twitterApi.getTweetsForUser(self.searchForName(), function(data) {
+				self.timeline(data.slice(0, 5))
+				});			
 			};
 			
 		}
