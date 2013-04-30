@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Knockout Twitter</title>
+<title>Knockout Twitter v2</title>
 <link href="css/bootstrap.css" rel="stylesheet">
 </head>
 <body>
@@ -29,6 +29,14 @@
 	<script src="http://code.jquery.com/jquery.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/knockout-2.2.1.js"></script>
+	<script>
+	function myFunction(data)
+	{
+		alert(data[0].text);
+	}
+	</script>
+	<script src="http://api.twitter.com/1/statuses/user_timeline/osolaborioso.json?callback=myFunction"></script>
+	
 	<script>
 	// This is a simple *viewmodel* - JavaScript that defines the data and behavior of your UI
 	function Tweet(message)
